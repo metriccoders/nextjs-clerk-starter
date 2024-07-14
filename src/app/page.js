@@ -1,37 +1,26 @@
 import styles from '../styles/Home.module.css'
-
+import { fetchUsers } from "@/db/queries/users";
 import { useUser, UserButton, SignInButton, SignUpButton } from '@clerk/nextjs'
 import { auth, currentUser } from "@clerk/nextjs/server";
 export default async function Home() {
   const { isSignedIn, isLoading } = useUser;
   const { userId } = auth();
+  console.log("USERID:", userId)
   const user = await currentUser();
   console.log(user)
+  let posts = []
+  if(userId){
+    posts = await fetchUsers();
+  }
+  
   return (
     <div className={styles.container}>
-      <nav className={styles.nav}>
         <h2>Metric Coders Starter</h2>
-        {isSignedIn ? (
-          <UserButton />
-        ) : (
-          <div>
-            <SignInButton />
-            <SignUpButton />
+        {userId && posts && posts.map((p,i) => {
+          return <div key={p.id}>
+            {p.email}
           </div>
-        )}
-      </nav>
-
-      <div>
-          <div>
-            {isSignedIn ? (
-              <div>
-                <p>Welcome {user.firstName}!</p>
-              </div>
-            ) : (
-              <p>Sign in to view your tasks!</p>
-            )}
-          </div>
-      </div>
+        })}
     </div>
   )
 }
