@@ -1,0 +1,10 @@
+.container {
+    margin: 1rem auto;
+    max-width: 760px;
+    text-align: center;
+  }
+  
+  .nav {
+    background: gray;
+    padding: 0.2rem;
+  }
